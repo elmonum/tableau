@@ -1,0 +1,25 @@
+[残業時間] = "10:30:00"
+
+1. 時間数値に変更（10.5）
+Hours　 =
+  INT(SPLIT([残業時間], ':', 1)) +
+  (INT(SPLIT([残業時間], ':', 2)) / 60)
+
+2. 秒単位に変更
+Seconds =
+  Hours * 3600
+
+3. 00:00形式に変更可能になる（フォーマット設定する）
+  IIF(INT([Seconds]/60) %60 == 60, 0, INT([Seconds]/60) %60) //minutes
+  + INT([Seconds]/3600) * 100 //hours
+
+4. 最終的な計算式
+  //minutes
+  IIF(INT(SPLIT([残業時間], ':', 2)) %60 == 60, 0,
+      INT(SPLIT([残業時間], ':', 2)) %60)
+  //hours
+  + INT(SPLIT([残業時間], ':', 1)) * 100
+  簡略化
+  →INT(SPLIT([残業時間], ':', 1)) * 100 + INT(SPLIT([残業時間], ':', 2))
+
+https://community.tableau.com/thread/147049
